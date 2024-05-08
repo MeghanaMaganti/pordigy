@@ -1,29 +1,56 @@
-// Select all sections and navigation links
-let sections = document.querySelectorAll('section');
-let navLinks = document.querySelectorAll('header nav a');
+window.onload = function(){
+    let minutes = 0;
+    let seconds = 0;
+    let tens = 0;
+    let appendMinutes = document.querySelector('#minutes');
+    let appendTens = document.querySelector('#tens');
+    let appendSeconds = document.querySelector('#seconds');
+    let startBtn = document.querySelector('#start');
+    let stopBtn = document.querySelector('#stop');
+    let resetBtn = document.querySelector('#reset');
+    let interval;
 
-// Add scroll event listener to window
-window.onscroll = () => {
-    // Loop through each section
-    sections.forEach(sec => {
-        // Get the current scroll position
-        let top = window.scrollY;
-        // Get the offset position of the section
-        let offset = sec.offsetTop;
-        // Get the height of the section
-        let height = sec.offsetHeight;
-        // Get the id of the section
-        let id = sec.getAttribute('id');
-
-        // Check if the current scroll position is within the bounds of the section
-        if (top >= offset && top < offset + height) {
-            // Loop through each navigation link
-            navLinks.forEach(link => {
-                // Remove 'active' class from all navigation links
-                link.classList.remove('active');
-            });
-            // Add 'active' class to the navigation link corresponding to the current section
-            document.querySelector('header nav a[href*=' + id + ']').classList.add('active');
+    const startTimer = () => {
+        tens++;
+        if (tens <= 9) {
+            appendTens.innerHTML = '0' + tens;
         }
-    });
+        if (tens > 9) {
+            appendTens.innerHTML = tens;
+        }
+        if (tens > 99) {
+            seconds++;
+            appendSeconds.innerHTML = '0' + seconds;
+            tens = 0;
+            appendTens.innerHTML = '00';
+        }
+        if (seconds > 9) {
+            appendSeconds.innerHTML = seconds;
+        }
+        if (seconds > 59) {
+            minutes++;
+            appendMinutes.innerHTML = '0' + minutes;
+            seconds = 0;
+            appendSeconds.innerHTML = '00';
+        }
+    };
+
+    startBtn.onclick = () => {
+        clearInterval(interval);
+        interval = setInterval(startTimer, 10);
+    };
+
+    stopBtn.onclick = () => {
+        clearInterval(interval);
+    };
+
+    resetBtn.onclick = () => {
+        clearInterval(interval);
+        tens = 0;
+        seconds = 0;
+        minutes = 0;
+        appendTens.innerHTML = '00';
+        appendSeconds.innerHTML = '00';
+        appendMinutes.innerHTML = '00';
+    };
 };
